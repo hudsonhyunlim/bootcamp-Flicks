@@ -12,12 +12,15 @@ class MovieCell: UITableViewCell {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
+    @IBOutlet weak var posterImageView: UIImageView!
     
     internal weak var movie:Movie? {
         didSet {
             if let movie = self.movie {
                 self.titleLabel.text = movie.title
                 self.overviewLabel.text = movie.overview
+                print(movie.getPosterURL(90))
+                self.posterImageView.setImageWithURL(movie.getPosterURL(90))
             }
         }
     }

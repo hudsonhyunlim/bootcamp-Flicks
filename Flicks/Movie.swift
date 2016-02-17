@@ -9,6 +9,8 @@
 import Foundation
 
 public class Movie {
+    
+    private static let PHOTO_URL = "https://image.tmdb.org/t/p/w"
 /*  Sample JSON
     poster_path: "/inVq3FRqcYIRl2la8iZikYYxFNR.jpg",
     adult: false,
@@ -86,6 +88,12 @@ public class Movie {
             self.voteCount = voteCount
         }
         
+    }
+    
+    public func getPosterURL(width: Int) -> NSURL {
+        let photoUrl = Movie.PHOTO_URL + String(width) + self.posterPath
+        let url = NSURL(string: photoUrl)
+        return url!
     }
     
 }
