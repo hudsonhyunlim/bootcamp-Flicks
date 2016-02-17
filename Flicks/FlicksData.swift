@@ -23,7 +23,6 @@ public final class FlicksData {
     
     public func refetchPosts(success: () -> Void, error:((NSError?) -> Void)?) {
         FlicksData.fetchPosts({(movies:[Movie]) in
-            print("homeboy")
             self.movies = movies
             success()
         }, errorCallback: {(NSError) in
@@ -34,9 +33,7 @@ public final class FlicksData {
     private static func fetchPosts(successCallback: (movies:[Movie]) -> Void, errorCallback: ((NSError?) -> Void)?) {
         let params = ["api_key": FlicksData.CLIENT_ID]
         let manager = AFHTTPRequestOperationManager()
-        print("yo")
         manager.GET(FlicksData.POPULAR_ENDPOINT, parameters: params, success: { (operation ,responseObject) -> Void in
-            print("homes")
             if let results = responseObject["results"] as? NSArray {
                 var movies:[Movie] = []
                 for result in results as! [NSDictionary] {
@@ -45,7 +42,7 @@ public final class FlicksData {
                 successCallback(movies: movies)
             }
             }, failure: { (operation, requestError) -> Void in
-                print("whoa")
+                print("whoa error")
                 if let errorCallback = errorCallback {
                     errorCallback(requestError)
                 }

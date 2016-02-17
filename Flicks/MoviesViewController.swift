@@ -42,9 +42,9 @@ extension MoviesViewController: UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("com.lyft.MovieCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("com.lyft.MovieCell", forIndexPath: indexPath) as! MovieCell
         if let flicksData = self.flicksData as FlicksData? {
-            cell.textLabel!.text = flicksData.movies[indexPath.row].title
+            cell.movie = flicksData.movies[indexPath.row]
         }
         return cell
     }
