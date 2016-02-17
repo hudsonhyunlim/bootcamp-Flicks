@@ -12,24 +12,40 @@ class MoviesViewController: UIViewController {
 
     @IBOutlet weak var moviesTableView: UITableView!
     
+    var flicksData:FlicksData?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.moviesTableView.delegate = self
         self.moviesTableView.dataSource = self
+        
+        self.flicksData = FlicksData()
+        self.flicksData!.refetchPosts({ () -> Void in
+            self.moviesTableView.reloadData()
+            
+            }, error: { (_: (NSError?)) in
+                
+            })
+        
     }
 }
 
 extension MoviesViewController: UITableViewDataSource {
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if let flicksData = self.flicksData as FlicksData? {
+            return flicksData.movies.count
+        } else {
+            return 0
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("com.lyft.MovieCell", forIndexPath: indexPath)
-        
-        cell.textLabel!.text = "row \(indexPath.row)"
+        if let flicksData = self.flicksData as FlicksData? {
+            cell.textLabel!.text = flicksData.movies[indexPath.row].title
+        }
         return cell
     }
 }
