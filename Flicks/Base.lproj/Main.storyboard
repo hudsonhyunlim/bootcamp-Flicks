@@ -139,7 +139,7 @@
         <!--Navigation Controller-->
         <scene sceneID="JMY-dV-6zb">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="oF3-dm-WGh" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="com.lyft.moviesNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="oF3-dm-WGh" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZIy-Gv-fsL">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

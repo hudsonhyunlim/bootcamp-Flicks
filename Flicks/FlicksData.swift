@@ -20,6 +20,7 @@ public final class FlicksData {
     
     static let CLIENT_ID = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
     static let POPULAR_ENDPOINT = "https://api.themoviedb.org/3/movie/now_playing"
+    static let TOP_RATED_ENDPOINT = "https://api.themoviedb.org/3/movie/top_rated"
     
     public var movies:[Movie] = []
     public var dataInFlight:Bool = false
@@ -29,13 +30,13 @@ public final class FlicksData {
         self.movies = []
     }
     
-    public func refetchPosts(success: () -> Void, error:((NSError?) -> Void)?) {
+    public func refetchPosts(endpoint: String, success: () -> Void, error:((NSError?) -> Void)?) {
         if !self.dataInFlight {
             self.dataInFlight = true
             if let delegate = self.delegate {
                 delegate.dataInFlight()
             }
-            FlicksData.fetchPosts({(movies:[Movie]) in
+            FlicksData.fetchPosts(endpoint, successCallback: {(movies:[Movie]) in
                 self.movies = movies
                 success()
                 self.dataInFlight = false
@@ -52,10 +53,10 @@ public final class FlicksData {
         }
     }
     
-    private static func fetchPosts(successCallback: (movies:[Movie]) -> Void, errorCallback: ((NSError?) -> Void)?) {
+    private static func fetchPosts(endpoint: String, successCallback: (movies:[Movie]) -> Void, errorCallback: ((NSError?) -> Void)?) {
         let params = ["api_key": FlicksData.CLIENT_ID]
         let manager = AFHTTPRequestOperationManager()
-        manager.GET(FlicksData.POPULAR_ENDPOINT, parameters: params, success: { (operation ,responseObject) -> Void in
+        manager.GET(endpoint, parameters: params, success: { (operation ,responseObject) -> Void in
             if let results = responseObject["results"] as? NSArray {
                 var movies:[Movie] = []
                 for result in results as! [NSDictionary] {

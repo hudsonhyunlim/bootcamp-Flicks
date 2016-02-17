@@ -16,6 +16,7 @@ class MoviesViewController: UIViewController {
     
     var flicksData:FlicksData?
     let refreshControl = UIRefreshControl()
+    var endpoint:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +32,7 @@ class MoviesViewController: UIViewController {
         self.refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
         self.moviesTableView.insertSubview(self.refreshControl, atIndex: 0)
         
-        self.flicksData!.refetchPosts({ () -> Void in
+        self.flicksData!.refetchPosts(self.endpoint!, success: { () -> Void in
                 self.moviesTableView.reloadData()
             }, error: { (_: (NSError?)) in
             })
@@ -48,7 +49,7 @@ class MoviesViewController: UIViewController {
     }
     
     func refreshControlAction(refreshControl: UIRefreshControl) {
-        self.flicksData!.refetchPosts({ () -> Void in
+        self.flicksData!.refetchPosts(self.endpoint!, success: { () -> Void in
             self.moviesTableView.reloadData()
             }, error: { (_: (NSError?)) in
         })
@@ -71,6 +72,10 @@ extension MoviesViewController: UITableViewDataSource {
             cell.movie = flicksData.movies[indexPath.row]
         }
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: false)
     }
 }
 
