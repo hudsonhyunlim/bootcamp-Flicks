@@ -16,18 +16,24 @@ public final class FlicksData {
     static let POPULAR_ENDPOINT = "https://api.themoviedb.org/3/movie/now_playing"
     
     public var movies:[Movie] = []
+    public var dataInFlight:Bool = false
     
     init() {
         self.movies = []
     }
     
     public func refetchPosts(success: () -> Void, error:((NSError?) -> Void)?) {
-        FlicksData.fetchPosts({(movies:[Movie]) in
-            self.movies = movies
-            success()
-        }, errorCallback: {(NSError) in
-            // TODO: how to do error handling?
-        });
+        if !self.dataInFlight {
+            self.dataInFlight = true
+            FlicksData.fetchPosts({(movies:[Movie]) in
+                self.movies = movies
+                success()
+                self.dataInFlight = false
+            }, errorCallback: {(NSError) in
+                // TODO: how to do error handling?
+                self.dataInFlight = false
+            });
+        }
     }
     
     private static func fetchPosts(successCallback: (movies:[Movie]) -> Void, errorCallback: ((NSError?) -> Void)?) {

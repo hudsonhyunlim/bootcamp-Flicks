@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class MoviesViewController: UIViewController {
 
@@ -21,11 +22,12 @@ class MoviesViewController: UIViewController {
         self.moviesTableView.dataSource = self
         
         self.flicksData = FlicksData()
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         self.flicksData!.refetchPosts({ () -> Void in
-            self.moviesTableView.reloadData()
-            
+                self.moviesTableView.reloadData()
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
             }, error: { (_: (NSError?)) in
-                
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
             })
         
     }
