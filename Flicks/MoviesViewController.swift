@@ -14,6 +14,7 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var moviesTableView: UITableView!
     
     var flicksData:FlicksData?
+    let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +24,9 @@ class MoviesViewController: UIViewController {
         
         self.flicksData = FlicksData()
         self.flicksData!.delegate = self
+        
+        self.refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
+        self.moviesTableView.insertSubview(self.refreshControl, atIndex: 0)
         
         self.flicksData!.refetchPosts({ () -> Void in
                 self.moviesTableView.reloadData()
@@ -38,6 +42,13 @@ class MoviesViewController: UIViewController {
             let vc = segue.destinationViewController as! DetailViewController
             vc.movie = self.flicksData!.movies[indexPath!.row]
         }
+    }
+    
+    func refreshControlAction(refreshControl: UIRefreshControl) {
+        self.flicksData!.refetchPosts({ () -> Void in
+            self.moviesTableView.reloadData()
+            }, error: { (_: (NSError?)) in
+        })
     }
 }
 
@@ -71,6 +82,7 @@ extension MoviesViewController: FlicksDataDelegateProtocol {
     }
     
     func dataFinishedFlight() {
+        self.refreshControl.endRefreshing()
         MBProgressHUD.hideHUDForView(self.view, animated: true)
     }
     
