@@ -9,6 +9,12 @@
 import Foundation
 import AFNetworking
 
+protocol FlicksDataDelegateProtocol: class {
+    func dataInFlight() -> Void
+    func dataFinishedFlight() -> Void
+    func dataErrored() -> Void
+}
+
 public final class FlicksData {
     // ...
     
@@ -17,6 +23,7 @@ public final class FlicksData {
     
     public var movies:[Movie] = []
     public var dataInFlight:Bool = false
+    weak var delegate:FlicksDataDelegateProtocol?
     
     init() {
         self.movies = []
@@ -25,13 +32,22 @@ public final class FlicksData {
     public func refetchPosts(success: () -> Void, error:((NSError?) -> Void)?) {
         if !self.dataInFlight {
             self.dataInFlight = true
+            if let delegate = self.delegate {
+                delegate.dataInFlight()
+            }
             FlicksData.fetchPosts({(movies:[Movie]) in
                 self.movies = movies
                 success()
                 self.dataInFlight = false
+                if let delegate = self.delegate {
+                    delegate.dataFinishedFlight()
+                }
             }, errorCallback: {(NSError) in
                 // TODO: how to do error handling?
                 self.dataInFlight = false
+                if let delegate = self.delegate {
+                    delegate.dataErrored()
+                }
             });
         }
     }

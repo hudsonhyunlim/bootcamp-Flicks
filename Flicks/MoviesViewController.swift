@@ -22,12 +22,11 @@ class MoviesViewController: UIViewController {
         self.moviesTableView.dataSource = self
         
         self.flicksData = FlicksData()
-        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        self.flicksData!.delegate = self
+        
         self.flicksData!.refetchPosts({ () -> Void in
                 self.moviesTableView.reloadData()
-                MBProgressHUD.hideHUDForView(self.view, animated: true)
             }, error: { (_: (NSError?)) in
-                MBProgressHUD.hideHUDForView(self.view, animated: true)
             })
         
     }
@@ -62,5 +61,22 @@ extension MoviesViewController: UITableViewDataSource {
 }
 
 extension MoviesViewController: UITableViewDelegate {
+    
+}
+
+extension MoviesViewController: FlicksDataDelegateProtocol {
+    
+    func dataInFlight() {
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+    }
+    
+    func dataFinishedFlight() {
+        MBProgressHUD.hideHUDForView(self.view, animated: true)
+    }
+    
+    func dataErrored() {
+        // TODO: show error
+        MBProgressHUD.hideHUDForView(self.view, animated: true)
+    }
     
 }
