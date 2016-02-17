@@ -82,6 +82,7 @@
                                         </view>
                                         <connections>
                                             <outlet property="posterImageView" destination="smd-KG-1k1" id="TbW-Bf-X6s"/>
+                                            <segue destination="ZCh-m3-upj" kind="push" identifier="com.lyft.segueFromGridToDetails" id="5gE-he-Qui"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -200,4 +201,7 @@
             <point key="canvasLocation" x="173" y="378"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="5gE-he-Qui"/>
+    </inferredMetricsTieBreakers>
 </document>

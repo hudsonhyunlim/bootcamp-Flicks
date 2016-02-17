@@ -46,11 +46,19 @@ class MoviesViewController: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        var index:Int?
         if segue.identifier == "com.lyft.segueToDetails" {
             let cell = sender as! UITableViewCell
             let indexPath = self.moviesTableView.indexPathForCell(cell)
-            let vc = segue.destinationViewController as! DetailViewController
-            vc.movie = self.flicksData!.movies[indexPath!.row]
+            index = indexPath!.row
+        } else if segue.identifier == "com.lyft.segueFromGridToDetails" {
+            let cell = sender as! UICollectionViewCell
+            let indexPath = self.moviesCollectionView.indexPathForCell(cell)
+            index = indexPath!.row
+        }
+        let vc = segue.destinationViewController as! DetailViewController
+        if let index = index {
+            vc.movie = self.flicksData!.movies[index]
         }
     }
     
