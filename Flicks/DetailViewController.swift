@@ -13,6 +13,8 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var infoView: UIView!
     
     var movie:Movie?
     
@@ -25,6 +27,10 @@ class DetailViewController: UIViewController {
             self.overviewLabel.text = movie.overview
             self.posterImageView.setImageWithURL(movie.getPosterURL(320))
         }
+        
+        self.scrollView.contentSize = CGSize(width: self.scrollView.frame.width, height: self.infoView.frame.size.height + self.infoView.frame.origin.y)
+        
+        self.overviewLabel.sizeToFit()
     }
 
     override func didReceiveMemoryWarning() {

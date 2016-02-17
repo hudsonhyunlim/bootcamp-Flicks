@@ -31,10 +31,12 @@ class MoviesViewController: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let cell = sender as! UITableViewCell
-        let indexPath = self.moviesTableView.indexPathForCell(cell)
-        let vc = segue.destinationViewController as! DetailViewController
-        vc.movie = self.flicksData!.movies[indexPath!.row]
+        if segue.identifier == "com.lyft.segueToDetails" {
+            let cell = sender as! UITableViewCell
+            let indexPath = self.moviesTableView.indexPathForCell(cell)
+            let vc = segue.destinationViewController as! DetailViewController
+            vc.movie = self.flicksData!.movies[indexPath!.row]
+        }
     }
 }
 

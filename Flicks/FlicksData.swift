@@ -42,7 +42,6 @@ public final class FlicksData {
                 successCallback(movies: movies)
             }
             }, failure: { (operation, requestError) -> Void in
-                print("whoa error")
                 if let errorCallback = errorCallback {
                     errorCallback(requestError)
                 }

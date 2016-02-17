@@ -49,7 +49,7 @@
                                             <outlet property="overviewLabel" destination="cPd-Hr-vbE" id="Rwd-l8-l8a"/>
                                             <outlet property="posterImageView" destination="9k7-z5-Ws8" id="ldo-hO-NXY"/>
                                             <outlet property="titleLabel" destination="Xr4-bL-bU7" id="OVg-mH-KbJ"/>
-                                            <segue destination="ZCh-m3-upj" kind="push" id="yOC-xp-d7e"/>
+                                            <segue destination="ZCh-m3-upj" kind="push" identifier="com.lyft.segueToDetails" id="yOC-xp-d7e"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -74,38 +74,46 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="gkn-bw-zwK">
-                                <rect key="frame" x="0.0" y="63" width="320" height="505"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <view alpha="0.80000000000000004" contentMode="scaleToFill" id="gVO-xi-EeJ">
-                                <rect key="frame" x="0.0" y="303" width="320" height="265"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="NDu-Nv-aV1">
+                                <rect key="frame" x="0.0" y="32" width="320" height="536"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ckv-VQ-3Ac">
-                                        <rect key="frame" x="8" y="8" width="304" height="24"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="gkn-bw-zwK">
+                                        <rect key="frame" x="0.0" y="-32" width="320" height="568"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Overview" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jca-n1-6ig">
-                                        <rect key="frame" x="8" y="40" width="299" height="184"/>
+                                    </imageView>
+                                    <view alpha="0.69999999999999996" contentMode="scaleToFill" id="gVO-xi-EeJ">
+                                        <rect key="frame" x="0.0" y="536" width="320" height="265"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ckv-VQ-3Ac">
+                                                <rect key="frame" x="8" y="8" width="304" height="24"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Overview" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jca-n1-6ig">
+                                                <rect key="frame" x="8" y="40" width="304" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="fGB-ke-Q44"/>
                     <connections>
+                        <outlet property="infoView" destination="gVO-xi-EeJ" id="MDv-0U-dHK"/>
                         <outlet property="overviewLabel" destination="jca-n1-6ig" id="8nN-8h-cef"/>
                         <outlet property="posterImageView" destination="gkn-bw-zwK" id="zK0-oX-hNH"/>
+                        <outlet property="scrollView" destination="NDu-Nv-aV1" id="h8V-WW-xDz"/>
                         <outlet property="titleLabel" destination="ckv-VQ-3Ac" id="9if-3P-TNN"/>
                     </connections>
                 </viewController>
