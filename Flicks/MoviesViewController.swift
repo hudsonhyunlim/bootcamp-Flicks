@@ -12,12 +12,15 @@ import MBProgressHUD
 class MoviesViewController: UIViewController {
 
     @IBOutlet weak var moviesTableView: UITableView!
+    @IBOutlet weak var errorNotificationView: UIView!
     
     var flicksData:FlicksData?
     let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.errorNotificationView.hidden = true
         
         self.moviesTableView.delegate = self
         self.moviesTableView.dataSource = self
@@ -78,6 +81,7 @@ extension MoviesViewController: UITableViewDelegate {
 extension MoviesViewController: FlicksDataDelegateProtocol {
     
     func dataInFlight() {
+        self.errorNotificationView.hidden = true
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
     }
     
@@ -87,7 +91,7 @@ extension MoviesViewController: FlicksDataDelegateProtocol {
     }
     
     func dataErrored() {
-        // TODO: show error
+        self.errorNotificationView.hidden = false
         MBProgressHUD.hideHUDForView(self.view, animated: true)
     }
     
