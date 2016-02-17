@@ -23,6 +23,7 @@ public final class FlicksData {
     static let TOP_RATED_ENDPOINT = "https://api.themoviedb.org/3/movie/top_rated"
     
     public var movies:[Movie] = []
+    private var cachedMovies:[Movie] = []
     public var dataInFlight:Bool = false
     weak var delegate:FlicksDataDelegateProtocol?
     
@@ -37,7 +38,8 @@ public final class FlicksData {
                 delegate.dataInFlight()
             }
             FlicksData.fetchPosts(endpoint, successCallback: {(movies:[Movie]) in
-                self.movies = movies
+                self.cachedMovies = movies
+                self.setMovies(nil)
                 success()
                 self.dataInFlight = false
                 if let delegate = self.delegate {
@@ -50,6 +52,15 @@ public final class FlicksData {
                     delegate.dataErrored()
                 }
             });
+        }
+    }
+    
+    public func setMovies(filter:String?) {
+        if let filter = filter {
+            let lowerFilter = filter.lowercaseString
+            self.movies = self.cachedMovies.filter({ (movie) in movie.title.lowercaseString.containsString(lowerFilter) })
+        } else {
+            self.movies = self.cachedMovies
         }
     }
     

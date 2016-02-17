@@ -37,12 +37,20 @@ class MoviesViewController: UIViewController {
         
         self.refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
         self.moviesTableView.insertSubview(self.refreshControl, atIndex: 0)
+        self.moviesCollectionView.insertSubview(self.refreshControl, atIndex: 0)
         
         self.flicksData!.refetchPosts(self.endpoint!, success: { () -> Void in
                 self.reloadView()
             }, error: { (_: (NSError?)) in
             })
         
+        
+        // Initialize the UISearchBar
+        let searchBar = UISearchBar()
+        searchBar.delegate = self
+        searchBar.sizeToFit()
+        searchBar.placeholder = "Filter Title"
+        self.navigationItem.titleView = searchBar
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -162,4 +170,15 @@ extension MoviesViewController: UICollectionViewDataSource {
 
 extension MoviesViewController: UICollectionViewDelegate {
     
+}
+
+extension MoviesViewController: UISearchBarDelegate {
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            self.flicksData?.setMovies(nil)
+        } else {
+            self.flicksData?.setMovies(searchText)
+        }
+        self.reloadView()
+    }
 }
