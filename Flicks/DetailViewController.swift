@@ -25,7 +25,7 @@ class DetailViewController: UIViewController {
         if let movie = self.movie {
             self.titleLabel.text = movie.title
             self.overviewLabel.text = movie.overview
-            self.posterImageView.setImageWithURL(movie.getPosterURL(640))
+            self.posterImageView.setImageWithURL(movie.getPosterURL(Movie.PHOTO_SIZES.LARGE.rawValue))
         }
         
         self.scrollView.contentSize = CGSize(width: self.scrollView.frame.width, height: self.infoView.frame.size.height + self.infoView.frame.origin.y)
