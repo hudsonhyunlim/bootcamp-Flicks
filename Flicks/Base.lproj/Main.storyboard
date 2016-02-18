@@ -79,6 +79,7 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                         <connections>
                                             <outlet property="posterImageView" destination="smd-KG-1k1" id="TbW-Bf-X6s"/>
                                             <segue destination="ZCh-m3-upj" kind="push" identifier="com.lyft.segueFromGridToDetails" id="5gE-he-Qui"/>
