@@ -81,5 +81,19 @@ public final class FlicksData {
                 }
         })
     }
+    
+    public static func loadImageIntoView(url: NSURL, imageView: UIImageView, success: () -> Void, failure: () -> Void) {
+        let request = NSURLRequest(URL: url)
+        imageView.alpha = 0.0
+        imageView.setImageWithURLRequest(request, placeholderImage: nil, success: {(NSURLRequest, NSHTTPURLResponse, image: UIImage) -> Void in
+                imageView.image = image
+                UIView.animateWithDuration(0.6, animations: {() in
+                    imageView.alpha = 1.0
+                })
+                success()
+            }, failure: {(NSURLRequest, NSHTTPURLResponse, NSError) -> Void in
+                failure()
+        })
+    }
 
 }

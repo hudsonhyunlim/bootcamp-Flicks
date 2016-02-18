@@ -26,11 +26,9 @@ class DetailViewController: UIViewController {
             self.titleLabel.text = movie.title
             self.overviewLabel.text = movie.overview
             
-            let request = NSURLRequest(URL: movie.getPosterURL(Movie.PHOTO_SIZES.MICRO.rawValue))
-            self.posterImageView.setImageWithURLRequest(request, placeholderImage: nil, success: {(NSURLRequest, NSHTTPURLResponse, image: UIImage) -> Void in
-                    self.posterImageView.image = image
+            FlicksData.loadImageIntoView(movie.getPosterURL(Movie.PHOTO_SIZES.MICRO.rawValue), imageView: self.posterImageView, success: {() -> Void in
                     self.posterImageView.setImageWithURL(movie.getPosterURL(Movie.PHOTO_SIZES.LARGE.rawValue))
-                }, failure: {(NSURLRequest, NSHTTPURLResponse, NSError) -> Void in
+                }, failure: {() -> Void in
                     // fallback and try once mmore
                     self.posterImageView.setImageWithURL(movie.getPosterURL(Movie.PHOTO_SIZES.SMALL.rawValue))
             })
