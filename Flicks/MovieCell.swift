@@ -19,7 +19,7 @@ class MovieCell: UITableViewCell {
             if let movie = self.movie {
                 self.titleLabel.text = movie.title
                 self.overviewLabel.text = movie.overview
-                self.posterImageView.setImageWithURL(movie.getPosterURL(Movie.PHOTO_SIZES.SMALL.rawValue))
+                FlicksData.loadImageIntoView(movie.getPosterURL(Movie.PHOTO_SIZES.SMALL.rawValue), imageView: self.posterImageView)
             }
         }
     }

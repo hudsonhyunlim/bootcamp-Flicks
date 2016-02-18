@@ -15,7 +15,7 @@ class MovieGridCell: UICollectionViewCell {
     internal weak var movie:Movie? {
         didSet {
             if let movie = self.movie {
-                self.posterImageView.setImageWithURL(movie.getPosterURL(Movie.PHOTO_SIZES.SMALL.rawValue))
+                FlicksData.loadImageIntoView(movie.getPosterURL(Movie.PHOTO_SIZES.SMALL.rawValue), imageView: self.posterImageView)
             }
         }
     }

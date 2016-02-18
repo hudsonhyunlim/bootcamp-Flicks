@@ -29,7 +29,7 @@ class DetailViewController: UIViewController {
             FlicksData.loadImageIntoView(movie.getPosterURL(Movie.PHOTO_SIZES.MICRO.rawValue), imageView: self.posterImageView, success: {() -> Void in
                     self.posterImageView.setImageWithURL(movie.getPosterURL(Movie.PHOTO_SIZES.LARGE.rawValue))
                 }, failure: {() -> Void in
-                    // fallback and try once mmore
+                    // fallback and try once more
                     self.posterImageView.setImageWithURL(movie.getPosterURL(Movie.PHOTO_SIZES.SMALL.rawValue))
             })
         }
