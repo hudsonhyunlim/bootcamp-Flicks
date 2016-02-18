@@ -15,6 +15,15 @@ protocol FlicksDataDelegateProtocol: class {
     func dataErrored() -> Void
 }
 
+extension Dictionary {
+    mutating func update(other:Dictionary) {
+        for (key,value) in other {
+            self.updateValue(value, forKey:key)
+        }
+    }
+}
+
+
 public final class FlicksData {
     // ...
     
@@ -25,6 +34,8 @@ public final class FlicksData {
     public var movies:[Movie] = []
     private var cachedMovies:[Movie] = []
     public var dataInFlight:Bool = false
+    private var currentPage:Int = 1
+    private var searchBeingExecuted:Bool = false
     weak var delegate:FlicksDataDelegateProtocol?
     
     init() {
@@ -34,11 +45,13 @@ public final class FlicksData {
     public func refetchPosts(endpoint: String, success: () -> Void, error:((NSError?) -> Void)?) {
         if !self.dataInFlight {
             self.dataInFlight = true
+            self.currentPage = 1
             if let delegate = self.delegate {
                 delegate.dataInFlight()
             }
             FlicksData.fetchPosts(
                 endpoint,
+                additionalParams: [:],
                 successCallback: {(movies:[Movie]) in
                     self.cachedMovies = movies
                     self.setMovies(nil)
@@ -61,14 +74,49 @@ public final class FlicksData {
     public func setMovies(filter:String?) {
         if let filter = filter {
             let lowerFilter = filter.lowercaseString
+            self.searchBeingExecuted = true
             self.movies = self.cachedMovies.filter({ (movie) in movie.title.lowercaseString.containsString(lowerFilter) })
         } else {
             self.movies = self.cachedMovies
+            self.searchBeingExecuted = false
         }
     }
     
-    private static func fetchPosts(endpoint: String, successCallback: (movies:[Movie]) -> Void, errorCallback: ((NSError?) -> Void)?) {
-        let params = ["api_key": FlicksData.CLIENT_ID]
+    public func addMorePosts(endpoint:String, success: () -> Void) {
+        if !self.dataInFlight && !self.searchBeingExecuted {
+            self.dataInFlight = true
+            if let delegate = self.delegate {
+                delegate.dataInFlight()
+            }
+            let params = [
+                "page": String(++self.currentPage)
+            ]
+            print(params)
+            FlicksData.fetchPosts(
+                endpoint,
+                additionalParams: params,
+                successCallback: {(movies:[Movie]) in
+                    self.cachedMovies = self.cachedMovies + movies
+                    self.setMovies(nil)
+                    success()
+                    self.dataInFlight = false
+                    if let delegate = self.delegate {
+                        delegate.dataFinishedFlight()
+                    }
+                },
+                errorCallback: {(NSError) in
+                    // TODO: how to do error handling?
+                    self.dataInFlight = false
+                    if let delegate = self.delegate {
+                        delegate.dataErrored()
+                    }
+            });
+        }
+    }
+    
+    private static func fetchPosts(endpoint: String, additionalParams:[String:String], successCallback: (movies:[Movie]) -> Void, errorCallback: ((NSError?) -> Void)?) {
+        var params:[String:String] = ["api_key": FlicksData.CLIENT_ID]
+        params.update(additionalParams)
         let manager = AFHTTPRequestOperationManager()
         manager.GET(
             endpoint,

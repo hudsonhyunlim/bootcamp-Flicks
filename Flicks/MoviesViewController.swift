@@ -8,6 +8,7 @@
 
 import UIKit
 import MBProgressHUD
+import SVPullToRefresh
 
 class MoviesViewController: UIViewController {
 
@@ -38,6 +39,9 @@ class MoviesViewController: UIViewController {
         self.refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
         self.moviesTableView.insertSubview(self.refreshControl, atIndex: 0)
         self.moviesCollectionView.insertSubview(self.refreshControl, atIndex: 0)
+        
+        self.moviesTableView.addInfiniteScrollingWithActionHandler(self.onInfiniteScroll)
+        self.moviesCollectionView.addInfiniteScrollingWithActionHandler(self.onInfiniteScroll)
         
         self.flicksData!.refetchPosts(
             self.endpoint!,
@@ -107,10 +111,22 @@ class MoviesViewController: UIViewController {
     private func reloadView() {
         if !self.moviesTableView.hidden {
             self.moviesTableView.reloadData()
+            self.moviesTableView.infiniteScrollingView.stopAnimating()
         } else {
             self.moviesCollectionView.reloadData()
+            self.moviesCollectionView.infiniteScrollingView.stopAnimating()
         }
         
+    }
+    
+    private func onInfiniteScroll() {
+        self.flicksData!.addMorePosts(
+            self.endpoint!,
+            success: { () -> Void in
+                // call [tableView.infiniteScrollingView stopAnimating] when done
+                self.reloadView()
+            }
+        )
     }
 }
 

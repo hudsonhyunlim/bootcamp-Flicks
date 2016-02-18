@@ -7,6 +7,7 @@ target 'Flicks' do
 
 pod 'AFNetworking', '~> 2.6'
 pod 'MBProgressHUD', '~> 0.9.2'
+pod 'SVPullToRefresh', '~> 0.4.1'
 
 end
 
