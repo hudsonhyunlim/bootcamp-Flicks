@@ -37,21 +37,24 @@ public final class FlicksData {
             if let delegate = self.delegate {
                 delegate.dataInFlight()
             }
-            FlicksData.fetchPosts(endpoint, successCallback: {(movies:[Movie]) in
-                self.cachedMovies = movies
-                self.setMovies(nil)
-                success()
-                self.dataInFlight = false
-                if let delegate = self.delegate {
-                    delegate.dataFinishedFlight()
-                }
-            }, errorCallback: {(NSError) in
-                // TODO: how to do error handling?
-                self.dataInFlight = false
-                if let delegate = self.delegate {
-                    delegate.dataErrored()
-                }
-            });
+            FlicksData.fetchPosts(
+                endpoint,
+                successCallback: {(movies:[Movie]) in
+                    self.cachedMovies = movies
+                    self.setMovies(nil)
+                    success()
+                    self.dataInFlight = false
+                    if let delegate = self.delegate {
+                        delegate.dataFinishedFlight()
+                    }
+                },
+                errorCallback: {(NSError) in
+                    // TODO: how to do error handling?
+                    self.dataInFlight = false
+                    if let delegate = self.delegate {
+                        delegate.dataErrored()
+                    }
+                });
         }
     }
     
@@ -67,19 +70,23 @@ public final class FlicksData {
     private static func fetchPosts(endpoint: String, successCallback: (movies:[Movie]) -> Void, errorCallback: ((NSError?) -> Void)?) {
         let params = ["api_key": FlicksData.CLIENT_ID]
         let manager = AFHTTPRequestOperationManager()
-        manager.GET(endpoint, parameters: params, success: { (operation ,responseObject) -> Void in
-            if let results = responseObject["results"] as? NSArray {
-                var movies:[Movie] = []
-                for result in results as! [NSDictionary] {
-                    movies.append(Movie(json: result))
+        manager.GET(
+            endpoint,
+            parameters: params,
+            success: { (operation ,responseObject) -> Void in
+                if let results = responseObject["results"] as? NSArray {
+                    var movies:[Movie] = []
+                    for result in results as! [NSDictionary] {
+                        movies.append(Movie(json: result))
+                    }
+                    successCallback(movies: movies)
                 }
-                successCallback(movies: movies)
-            }
-            }, failure: { (operation, requestError) -> Void in
+            },
+            failure: { (operation, requestError) -> Void in
                 if let errorCallback = errorCallback {
                     errorCallback(requestError)
                 }
-        })
+            })
     }
     
     public static func loadImageIntoView(url: NSURL, imageView: UIImageView) {
@@ -89,19 +96,21 @@ public final class FlicksData {
     public static func loadImageIntoView(url: NSURL, imageView: UIImageView, success: (() -> Void)?, failure: (() -> Void)?) {
         let request = NSURLRequest(URL: url)
         imageView.alpha = 0.0
-        imageView.setImageWithURLRequest(request, placeholderImage: nil, success: {(NSURLRequest, NSHTTPURLResponse, image: UIImage) -> Void in
+        imageView.setImageWithURLRequest(request, placeholderImage: nil,
+            success: {(NSURLRequest, NSHTTPURLResponse, image: UIImage) -> Void in
                 imageView.image = image
                 UIView.animateWithDuration(0.6, animations: {() in
                     imageView.alpha = 1.0
                 })
-            if let success = success {
-                success()
-            }
-            }, failure: {(NSURLRequest, NSHTTPURLResponse, NSError) -> Void in
+                if let success = success {
+                    success()
+                }
+            },
+            failure: {(NSURLRequest, NSHTTPURLResponse, NSError) -> Void in
                 if let failure = failure {
                     failure()
                 }
-        })
+            })
     }
 
 }

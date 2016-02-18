@@ -26,33 +26,21 @@ class DetailViewController: UIViewController {
             self.titleLabel.text = movie.title
             self.overviewLabel.text = movie.overview
             
-            FlicksData.loadImageIntoView(movie.getPosterURL(Movie.PHOTO_SIZES.MICRO.rawValue), imageView: self.posterImageView, success: {() -> Void in
+            FlicksData.loadImageIntoView(movie.getPosterURL(
+                Movie.PHOTO_SIZES.MICRO.rawValue),
+                imageView: self.posterImageView,
+                success: {() -> Void in
                     self.posterImageView.setImageWithURL(movie.getPosterURL(Movie.PHOTO_SIZES.LARGE.rawValue))
-                }, failure: {() -> Void in
+                },
+                failure: {() -> Void in
                     // fallback and try once more
                     self.posterImageView.setImageWithURL(movie.getPosterURL(Movie.PHOTO_SIZES.SMALL.rawValue))
-            })
+                })
         }
         
         self.scrollView.contentSize = CGSize(width: self.scrollView.frame.width, height: self.infoView.frame.size.height + self.infoView.frame.origin.y)
         
         self.overviewLabel.sizeToFit()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

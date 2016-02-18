@@ -39,9 +39,13 @@ class MoviesViewController: UIViewController {
         self.moviesTableView.insertSubview(self.refreshControl, atIndex: 0)
         self.moviesCollectionView.insertSubview(self.refreshControl, atIndex: 0)
         
-        self.flicksData!.refetchPosts(self.endpoint!, success: { () -> Void in
+        self.flicksData!.refetchPosts(
+            self.endpoint!,
+            success: { () -> Void in
                 self.reloadView()
-            }, error: { (_: (NSError?)) in
+            },
+            error: { (_: (NSError?)) in
+                // TODO: what should I do
             })
         
         
@@ -71,10 +75,13 @@ class MoviesViewController: UIViewController {
     }
     
     func refreshControlAction(refreshControl: UIRefreshControl) {
-        self.flicksData!.refetchPosts(self.endpoint!, success: { () -> Void in
+        self.flicksData!.refetchPosts(
+            self.endpoint!,
+            success: { () -> Void in
                 self.reloadView()
-            }, error: { (_: (NSError?)) in
-        })
+            },
+            error: { (_: (NSError?)) in
+            })
     }
     
     @IBAction func onLayoutSelectorChanged(sender: UISegmentedControl) {
