@@ -18,31 +18,34 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var moviesCollectionView: UICollectionView!
     
     var flicksData:FlicksData?
-    let refreshControl = UIRefreshControl()
     var endpoint:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // hide subviews
         self.errorNotificationView.hidden = true
-        
-        self.moviesTableView.delegate = self
-        self.moviesTableView.dataSource = self
-        
-        self.moviesCollectionView.delegate = self
-        self.moviesCollectionView.dataSource = self
         self.moviesCollectionView.hidden = true
         
+        // add delegates
+        self.moviesTableView.delegate = self
+        self.moviesTableView.dataSource = self
+        self.moviesCollectionView.delegate = self
+        self.moviesCollectionView.dataSource = self
+        
+        // initialize app
         self.flicksData = FlicksData()
         self.flicksData!.delegate = self
         
-        self.refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
-        self.moviesTableView.insertSubview(self.refreshControl, atIndex: 0)
-        self.moviesCollectionView.insertSubview(self.refreshControl, atIndex: 0)
+        // add pull to refresh (SVPullToRefresh)
+        self.moviesTableView.addPullToRefreshWithActionHandler(self.onPullToRefresh)
+        self.moviesCollectionView.addPullToRefreshWithActionHandler(self.onPullToRefresh)
         
+        // add infinite scroll (SVPullToRefresh)
         self.moviesTableView.addInfiniteScrollingWithActionHandler(self.onInfiniteScroll)
         self.moviesCollectionView.addInfiniteScrollingWithActionHandler(self.onInfiniteScroll)
         
+        // initial load
         self.flicksData!.refetchPosts(
             self.endpoint!,
             success: { () -> Void in
@@ -78,16 +81,6 @@ class MoviesViewController: UIViewController {
         }
     }
     
-    func refreshControlAction(refreshControl: UIRefreshControl) {
-        self.flicksData!.refetchPosts(
-            self.endpoint!,
-            success: { () -> Void in
-                self.reloadView()
-            },
-            error: { (_: (NSError?)) in
-            })
-    }
-    
     @IBAction func onLayoutSelectorChanged(sender: UISegmentedControl) {
         let selected = sender.selectedSegmentIndex
         if selected == 0 {
@@ -112,9 +105,11 @@ class MoviesViewController: UIViewController {
         if !self.moviesTableView.hidden {
             self.moviesTableView.reloadData()
             self.moviesTableView.infiniteScrollingView.stopAnimating()
+            self.moviesTableView.pullToRefreshView.stopAnimating()
         } else {
             self.moviesCollectionView.reloadData()
             self.moviesCollectionView.infiniteScrollingView.stopAnimating()
+            self.moviesCollectionView.pullToRefreshView.stopAnimating()
         }
         
     }
@@ -127,6 +122,16 @@ class MoviesViewController: UIViewController {
                 self.reloadView()
             }
         )
+    }
+    
+    private func onPullToRefresh() {
+        self.flicksData!.refetchPosts(
+            self.endpoint!,
+            success: { () -> Void in
+                self.reloadView()
+            },
+            error: { (_: (NSError?)) in
+        })
     }
 }
 
@@ -161,7 +166,6 @@ extension MoviesViewController: FlicksDataDelegateProtocol {
     }
     
     func dataFinishedFlight() {
-        self.refreshControl.endRefreshing()
         MBProgressHUD.hideHUDForView(self.view, animated: true)
     }
     
