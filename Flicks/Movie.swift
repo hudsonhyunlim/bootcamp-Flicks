@@ -11,9 +11,10 @@ import Foundation
 public class Movie {
     
     private static let PHOTO_URL = "https://image.tmdb.org/t/p/w"
-    public enum PHOTO_SIZES: Int {
-        case SMALL = 300
-        case LARGE = 640
+    public enum PHOTO_SIZES: String {
+        case MICRO = "90"
+        case SMALL = "300"
+        case LARGE = "1000"
     }
 /*  Sample JSON
     poster_path: "/inVq3FRqcYIRl2la8iZikYYxFNR.jpg",
@@ -94,8 +95,8 @@ public class Movie {
         
     }
     
-    public func getPosterURL(width: Int) -> NSURL {
-        let photoUrl = Movie.PHOTO_URL + String(width) + self.posterPath
+    public func getPosterURL(width: String) -> NSURL {
+        let photoUrl = Movie.PHOTO_URL + width + self.posterPath
         let url = NSURL(string: photoUrl)
         return url!
     }

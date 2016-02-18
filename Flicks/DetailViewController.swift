@@ -25,7 +25,15 @@ class DetailViewController: UIViewController {
         if let movie = self.movie {
             self.titleLabel.text = movie.title
             self.overviewLabel.text = movie.overview
-            self.posterImageView.setImageWithURL(movie.getPosterURL(Movie.PHOTO_SIZES.LARGE.rawValue))
+            
+            let request = NSURLRequest(URL: movie.getPosterURL(Movie.PHOTO_SIZES.MICRO.rawValue))
+            self.posterImageView.setImageWithURLRequest(request, placeholderImage: nil, success: {(NSURLRequest, NSHTTPURLResponse, image: UIImage) -> Void in
+                    self.posterImageView.image = image
+                    self.posterImageView.setImageWithURL(movie.getPosterURL(Movie.PHOTO_SIZES.LARGE.rawValue))
+                }, failure: {(NSURLRequest, NSHTTPURLResponse, NSError) -> Void in
+                    // fallback and try once mmore
+                    self.posterImageView.setImageWithURL(movie.getPosterURL(Movie.PHOTO_SIZES.SMALL.rawValue))
+            })
         }
         
         self.scrollView.contentSize = CGSize(width: self.scrollView.frame.width, height: self.infoView.frame.size.height + self.infoView.frame.origin.y)
