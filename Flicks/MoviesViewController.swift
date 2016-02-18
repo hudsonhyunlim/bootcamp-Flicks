@@ -203,8 +203,12 @@ extension MoviesViewController: UISearchBarDelegate {
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText == "" {
             self.flicksData?.setMovies(nil)
+            self.moviesTableView.infiniteScrollingView.hidden = true
+            self.moviesTableView.pullToRefreshView.hidden = true
         } else {
             self.flicksData?.setMovies(searchText)
+            self.moviesTableView.infiniteScrollingView.hidden = false
+            self.moviesTableView.pullToRefreshView.hidden = false
         }
         self.reloadView()
     }

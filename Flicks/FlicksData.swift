@@ -91,13 +91,12 @@ public final class FlicksData {
             let params = [
                 "page": String(++self.currentPage)
             ]
-            print(params)
             FlicksData.fetchPosts(
                 endpoint,
                 additionalParams: params,
                 successCallback: {(movies:[Movie]) in
                     self.cachedMovies = self.cachedMovies + movies
-                    self.setMovies(nil)
+                    self.movies = self.cachedMovies
                     success()
                     self.dataInFlight = false
                     if let delegate = self.delegate {
